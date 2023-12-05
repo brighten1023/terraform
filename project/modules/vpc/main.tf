@@ -136,7 +136,7 @@ resource "aws_security_group" "shared-bastion-sg" {
 
   ingress = [
     {
-        description = "Ssh form outside"
+        description = "Ssh from outside"
         from_port = 22
         to_port = 22
         protocol = "tcp"
