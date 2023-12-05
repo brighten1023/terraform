@@ -75,7 +75,7 @@ resource "aws_eip" "shared-nat-eip" {
 #Create shared NAT GW
 resource "aws_nat_gateway" "shared-nat" {
   allocation_id = aws_eip.shared-nat-eip.id
-  subnet_id = aws_subnet.public[0].index
+  subnet_id = aws_subnet.public[1].index
   tags = merge(
     var.default_tags,
     {
@@ -145,6 +145,90 @@ resource "aws_security_group" "shared-bastion-sg" {
         security_groups = []
         ipv6_cidr_blocks = []
         self = null
+    }
+  ]
+  egress = [
+    {
+        description = "Allow all outbound traffic"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+        prefix_list_ids = []
+        security_groups = []
+        self = null
+    }
+  ]
+  tags = var.default_tags
+}
+
+#Security group for Shared-VM1
+resource "aws_security_group" "shared-vm1-sg" {
+  name = "shared-vm1-sg"
+  description = "Allow ssh from shared-bastion and icmp from shared-vm2"
+  vpc_id = aws_vpc.VPC-Shared.id
+
+  ingress = [
+    {
+        description = "Ssh from shared-bastion"
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = []
+        prefix_list_ids = []
+        security_groups = [aws_security_group.shared-bastion-sg.id]
+        ipv6_cidr_blocks = []
+        self = null
+    },
+    {
+        cidr_blocks = ["10.0.4.0/24"]
+        from_port   = 8
+        to_port     = 0
+        protocol    = "icmp"
+        description = "Ping from shared-vm2"
+    }
+  ]
+  egress = [
+    {
+        description = "Allow all outbound traffic"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+        prefix_list_ids = []
+        security_groups = []
+        self = null
+    }
+  ]
+  tags = var.default_tags
+}
+
+#Security group for Shared-VM2
+resource "aws_security_group" "shared-vm2-sg" {
+  name = "shared-vm2-sg"
+  description = "Allow ssh from shared-bastion and icmp from shared-vm1"
+  vpc_id = aws_vpc.VPC-Shared.id
+
+  ingress = [
+    {
+        description = "Ssh from shared-bastion"
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = []
+        prefix_list_ids = []
+        security_groups = [aws_security_group.shared-bastion-sg.id]
+        ipv6_cidr_blocks = []
+        self = null
+    },
+    {
+        cidr_blocks = ["10.0.3.0/24"]
+        from_port   = 8
+        to_port     = 0
+        protocol    = "icmp"
+        description = "Ping from shared-vm1"
     }
   ]
   egress = [
