@@ -1,12 +1,7 @@
-# file modules/vpc/variables.tf
+# file modules/networking/variables.tf
 
 variable "vpc_cidr" {
   type = string
-}
-
-variable "counter" {
-  type = number
-  default = 1
 }
 
 variable "public_cidrs" {
