@@ -161,7 +161,7 @@ module "shared_bastion" {
   name = "Shared-Bastion"
   key_name = "vockey"
   subnet_id = module.shared_networking.public_subnet_ids[0].id
-  vpc_security_group_ids = module.shared_bastion_sg.sg_id
+  vpc_security_group_ids = [module.shared_bastion_sg.sg_id]
   associate_public_ip_address = true
   tags = "Shared-Bastion"
 }
@@ -173,7 +173,7 @@ module "shared_vm1" {
   name = "Shared-vm1"
   key_name = "vockey"
   subnet_id = module.shared_networking.private_subnet_ids[0].id
-  vpc_security_group_ids = module.shared_vm1_sg.sg_id
+  vpc_security_group_ids = [module.shared_vm1_sg.sg_id]
   associate_public_ip_address = false
   tags = "Shared-VM1"
 }
@@ -185,7 +185,7 @@ module "shared_vm2" {
   name = "Shared-vm2"
   key_name = "vockey"
   subnet_id = module.shared_networking.private_subnet_ids[1].id
-  vpc_security_group_ids = module.shared_vm2_sg.sg_id
+  vpc_security_group_ids = [module.shared_vm2_sg.sg_id]
   associate_public_ip_address = false
   tags = "Shared-VM2"
 }
