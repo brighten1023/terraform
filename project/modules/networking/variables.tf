@@ -15,3 +15,7 @@ variable "private_cidrs" {
 variable "availability_zones" {
   type = list(any)
 }
+
+variable "tags" {
+  type = map(string)
+}

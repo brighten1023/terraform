@@ -1,7 +1,7 @@
 # file modules/instance/variables.tf
 
-variable "ami_id" {
-    type = string
+variable "name" {
+  type = string
 }
 
 variable "instance_type" {
@@ -19,4 +19,12 @@ variable "key_name" {
 
 variable "vpc_security_group_ids" {
     type = list(any)
+}
+
+variable "tags" {
+    type = string
+}
+
+variable "associate_public_ip_address" {
+    type = bool
 }

@@ -10,8 +10,8 @@ terraform {
 #AWS Provider
 provider "aws" {
     region = "us-east-1"
-    access_key = "ASIATWC6KBPQXSUTQZPF"
-    secret_key = "ekDwJxtdjPxvnzOdMBfYTM2yPrN6R7GJlQHK/l0m"
+    access_key = "ASIATWC6KBPQ6QKBNKO5"
+    secret_key = "ONrAD+GMn2MeTt0MYJir+OI89ZZC018vLb4I5e7V"
 }
 
 #Create VPC, subnets, igw, nat
@@ -21,4 +21,172 @@ module "shared_networking" {
   public_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
   private_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
   availability_zones = ["us-east-1a", "us-east-1b"]
+  tags = {Name = "Shared-VPC"}
+}
+
+#Create shared-bastion sg
+module "shared_bastion_sg" {
+  source = "./modules/security_group"
+  name_prefix = "shared_bastion_sg"
+  tags = {Name = "shared_bastion_sg"}
+  description = "Allow ssh inbound traffic, allow any outbound traffic"
+  vpc_id = module.shared_networking.vpc_id
+}
+
+#Create shared-vm1 sg
+module "shared_vm1_sg" {
+  source = "./modules/security_group"
+  name_prefix = "shared_vm1_sg"
+  tags = {Name = "shared_vm1_sg"}
+  description = "Allow ssh from shared-bastion and icmp from shared-vm2"
+  vpc_id = module.shared_networking.vpc_id
+}
+
+#Create shared-vm2 sg
+module "shared_vm2_sg" {
+  source = "./modules/security_group"
+  name_prefix = "shared_vm2_sg"
+  tags = {Name = "shared_vm2_sg"}
+  description = "Allow ssh from shared-bastion and icmp from shared-vm1"
+  vpc_id = module.shared_networking.vpc_id
+}
+
+#Create sg ingress rule that allow ssh from outside for shared-bastion sg
+module "shared_bastion_sg_rule_ingress" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.shared_bastion_sg.sg_id
+  description = "Ssh from outside"
+  source_security_group_id = null
+}
+
+#Create sg egress rule that allow all traffic for shared-bastion
+module "shared_bastion_sg_rule_egress" {
+  source = "./modules/security_group_rule"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.shared_bastion_sg.sg_id
+  description = "Allow all outbound traffic"
+  source_security_group_id = null
+}
+
+#Create sg ingress rule that allow ssh from shared-bastion for shared-vm1
+module "shared_vm1_sg_rule_ingress_ssh" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = []
+  security_group_id = module.shared_vm1_sg.sg_id
+  description = "Ssh from shared-bastion"
+  source_security_group_id = module.shared_bastion_sg.sg_id
+}
+
+#Create sg ingress rule that allow ping from shared-vm2 for shared-vm1
+module "shared_vm1_sg_rule_ingress_ping" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 8
+  to_port = 0
+  protocol = "icmp"
+  cidr_blocks = ["10.0.4.0/24"]
+  security_group_id = module.shared_vm1_sg.sg_id
+  description = "Ping from shared-vm2"
+  source_security_group_id = null
+}
+
+#Create sg egress rule that allow all traffic for shared-vm1
+module "shared_vm1_sg_rule_egress" {
+  source = "./modules/security_group_rule"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.shared_vm1_sg.sg_id
+  description = "Allow all outbound traffic"
+  source_security_group_id = null
+}
+
+#Create sg ingress rule that allow ssh from shared-bastion for shared-vm2
+module "shared_vm2_sg_rule_ingress_ssh" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = []
+  security_group_id = module.shared_vm2_sg.sg_id
+  description = "Ssh from shared-bastion"
+  source_security_group_id = module.shared_bastion_sg.sg_id
+}
+
+#Create sg ingress rule that allow ping from shared-vm1 for shared-vm2
+module "shared_vm2_sg_rule_ingress_ping" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 8
+  to_port = 0
+  protocol = "icmp"
+  cidr_blocks = ["10.0.3.0/24"]
+  security_group_id = module.shared_vm2_sg.sg_id
+  description = "Ping from shared-vm1"
+  source_security_group_id = null
+}
+
+#Create sg egress rule that allow all traffic for shared-vm2
+module "shared_vm2_sg_rule_egress" {
+  source = "./modules/security_group_rule"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.shared_vm2_sg.sg_id
+  description = "Allow all outbound traffic"
+  source_security_group_id = null
+}
+
+#Create shared_bastion instance
+module "shared_bastion" {
+  source = "./modules/instance"
+  instance_type = "t2.micro"
+  name = "Shared-Bastion"
+  key_name = "vockey"
+  subnet_id = module.shared_networking.public_subnet_ids[0].id
+  vpc_security_group_ids = module.shared_bastion_sg.sg_id
+  associate_public_ip_address = true
+  tags = "Shared-Bastion"
+}
+
+#Create shared_vm1 instance
+module "shared_vm1" {
+  source = "./modules/instance"
+  instance_type = "t2.micro"
+  name = "Shared-vm1"
+  key_name = "vockey"
+  subnet_id = module.shared_networking.private_subnet_ids[0].id
+  vpc_security_group_ids = module.shared_vm1_sg.sg_id
+  associate_public_ip_address = false
+  tags = "Shared-VM1"
+}
+
+#Create shared_vm2 instance
+module "shared_vm2" {
+  source = "./modules/instance"
+  instance_type = "t2.micro"
+  name = "Shared-vm2"
+  key_name = "vockey"
+  subnet_id = module.shared_networking.private_subnet_ids[1].id
+  vpc_security_group_ids = module.shared_vm2_sg.sg_id
+  associate_public_ip_address = false
+  tags = "Shared-VM2"
 }

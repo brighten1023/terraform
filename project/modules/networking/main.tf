@@ -25,6 +25,7 @@ resource "aws_vpc" "project_vpc" {
   cidr_block = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support = true
+  tags = var.tags
 }
 
 
@@ -44,7 +45,6 @@ resource "aws_subnet" "public" {
   availability_zone = var.availability_zones[count.index]
   cidr_block = var.public_cidrs[count.index]
   tags = merge(
-    var.default_tags,
     {
         Name = "Public_SN${count.index + 1}"
     }
@@ -58,7 +58,6 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[count.index]
   cidr_block = var.private_cidrs[count.index]
   tags = merge(
-    var.default_tags,
     {
         Name = "Private_SN${count.index + 1}"
     }
@@ -69,7 +68,6 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "project_igw" {
   vpc_id = aws_vpc.project_vpc.id
   tags = merge(
-    var.default_tags,
     {
         Name = "IGW"
     }
@@ -84,9 +82,8 @@ resource "aws_eip" "nat-eip" {
 #Create NAT GW
 resource "aws_nat_gateway" "project_nat" {
   allocation_id = aws_eip.nat-eip.id
-  subnet_id = aws_subnet.public[1].index
+  subnet_id = aws_subnet.public[1].id
   tags = merge(
-    var.default_tags,
     {
         Name = "NAT-GW"
     }
@@ -102,7 +99,6 @@ resource "aws_route_table" "rt-public" {
     gateway_id = aws_internet_gateway.project_igw
   }
   tags = merge(
-    var.default_tags,
     {
         Name = "Public-RT"
     }
@@ -117,7 +113,6 @@ resource "aws_route_table" "rt-private" {
     gateway_id = aws_nat_gateway.project_nat
   }
   tags = merge(
-    var.default_tags,
     {
         Name = "private-RT"
     }

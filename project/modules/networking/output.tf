@@ -1,11 +1,11 @@
 # file modules/vpc/output.tf
 #output subnets ids
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  value = aws_subnet.public[*]
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
+  value = aws_subnet.private[*]
 }
 
 #output nat gateway ids
