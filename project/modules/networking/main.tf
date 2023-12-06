@@ -96,7 +96,7 @@ resource "aws_route_table" "rt-public" {
   vpc_id = aws_vpc.project_vpc.id
   route{
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.project_igw
+    gateway_id = aws_internet_gateway.project_igw.id
   }
   tags = merge(
     {
@@ -110,7 +110,7 @@ resource "aws_route_table" "rt-private" {
   vpc_id = aws_vpc.project_vpc
   route{
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.project_nat
+    gateway_id = aws_nat_gateway.project_nat.id
   }
   tags = merge(
     {
