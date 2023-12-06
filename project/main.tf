@@ -10,8 +10,7 @@ terraform {
 #AWS Provider
 provider "aws" {
     region = "us-east-1"
-    access_key = "ASIATWC6KBPQ6QKBNKO5"
-    secret_key = "ONrAD+GMn2MeTt0MYJir+OI89ZZC018vLb4I5e7V"
+    share_credential_file = ".aws/credentials"
 }
 
 #Create VPC, subnets, igw, nat
