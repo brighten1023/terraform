@@ -13,12 +13,13 @@ provider "aws" {
     shared_credentials_file = ".aws/credentials"
 }
 
-
+/*
 #Create key pair
 module "key" {
   source = "./modules/key_pair"
   key_name = "project-key"
 }
+*/
 
 #Create VPC, subnets, igw, nat in shared network
 module "shared_networking" {
