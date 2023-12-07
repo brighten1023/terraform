@@ -156,10 +156,10 @@ module "shared_vm2_sg_rule_ingress_ping_dev" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = null
+  cidr_blocks = ["192.168.3.0/24"]
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ping from shared-vm1"
-  source_security_group_id = module.dev_vm1_sg.sg_id
+  source_security_group_id = null
 }
 
 #Create sg egress rule that allow all traffic for shared-vm2
@@ -251,10 +251,10 @@ module "dev_vm1_sg_rule_ingress_ping_dev" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = null
+  cidr_blocks = ["10.0.4.0/24"]
   security_group_id = module.dev_vm1_sg.sg_id
   description = "Ping from shared-vm2"
-  source_security_group_id = module.shared_vm2_sg.sg_id
+  source_security_group_id = null
 }
 
 #Create sg egress rule that allow all traffic for dev-vm1
