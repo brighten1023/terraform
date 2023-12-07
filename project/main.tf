@@ -203,6 +203,8 @@ module "dev_networking" {
 #Create peering connection
 module "peering_connection" {
   source = "./modules/peering"
+  peer_vpc_id = module.dev_networking.vpc_id
+  vpc_id = module.shared_networking.vpc_id
   source_route_table_id = module.shared_networking.private_table_id
   dest_route_table_id = module.dev_networking.private_table_id
   source_cidr = "10.0.4.0/24"
