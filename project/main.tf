@@ -218,7 +218,7 @@ module "dev_bastion" {
   name = "dev-Bastion"
   key_name = "vockey"
   subnet_id = module.dev_networking.public_subnet_ids[0].id
-  vpc_security_group_ids = bull
+  vpc_security_group_ids = null
   associate_public_ip_address = true
   tags = "Dev-Bastion"
 }
