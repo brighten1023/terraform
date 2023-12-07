@@ -91,7 +91,7 @@ module "shared_vm1_sg_rule_ingress_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = []
+  cidr_blocks = null
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ssh from shared-bastion"
   source_security_group_id = module.shared_bastion_sg.sg_id
@@ -104,7 +104,7 @@ module "shared_vm1_sg_rule_ingress_ping" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = []
+  cidr_blocks = null
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ping from shared-vm2"
   source_security_group_id = module.shared_vm2_sg.sg_id
@@ -130,7 +130,7 @@ module "shared_vm2_sg_rule_ingress_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = []
+  cidr_blocks = null
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ssh from shared-bastion"
   source_security_group_id = module.shared_bastion_sg.sg_id
@@ -143,7 +143,7 @@ module "shared_vm2_sg_rule_ingress_ping" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = []
+  cidr_blocks = null
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ping from shared-vm1"
   source_security_group_id = module.shared_vm1_sg.sg_id
@@ -248,7 +248,7 @@ module "dev_vm1_sg_rule_ingress_ping_dev" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = []
+  cidr_blocks = null
   security_group_id = module.dev_vm1_sg.sg_id
   description = "Ping from shared-vm2"
   source_security_group_id = module.shared_vm2_sg.sg_id
