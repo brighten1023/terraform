@@ -18,7 +18,11 @@ provider "aws" {
 module "s3_storage" {
   source = "./modules/s3"
   bucket_name = "project_s3_storage"
+}
+
+module "upload" {
+  source = "./modules/upload_image"
+  bucket_name = "project_s3_storage"
   file_name = "aws_picture.png"
   file_path = "./aws_picture.png"
 }
-
