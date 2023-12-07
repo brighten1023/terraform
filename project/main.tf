@@ -20,15 +20,6 @@ module "s3_storage" {
   bucket_name = "project_s3_storage"
 }
 
-#Save tfstate to s3
-terraform {
-  backend "s3" {
-    bucket = module.s3_storage.bucket_id
-    key = "terraform.tfstate"
-    region = "us-east-1"
-  }
-}
-
 #Save image to s3
 module "upload_image" {
   source = "./modules/s3"
