@@ -13,13 +13,30 @@ provider "aws" {
     shared_credentials_file = ".aws/credentials"
 }
 
-/*
-#Create key pair
-module "key" {
-  source = "./modules/key_pair"
-  key_name = "project-key"
+
+#Create s3 bucket 
+module "s3_storage" {
+  source = "./modules/s3"
+  bucket_name = "project_s3_storage"
 }
-*/
+
+#Save tfstate to s3
+terraform {
+  backend "s3" {
+    bucket = module.s3_storage.bucket_name
+    key = "terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
+#Save image to s3
+module "upload_image" {
+  source = "./modules/s3"
+  bucket_id = module.s3_storage.bucket_id
+  file_name = "aws_picture.png"
+  file_path = "./aws_picture.png"
+}
+
 
 #Create VPC, subnets, igw, nat in shared network
 module "shared_networking" {
