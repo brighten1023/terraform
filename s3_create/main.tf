@@ -17,7 +17,7 @@ provider "aws" {
 #Create s3 bucket,and save image to s3 
 module "s3_storage" {
   source = "./modules/s3"
-  bucket_name = "project_s3_storage"
+  bucket_name = "project_s3_storage_li_qian"
 }
 
 module "upload" {
