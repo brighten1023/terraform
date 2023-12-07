@@ -222,7 +222,7 @@ module "dev_bastion" {
 }
 
 #Create dev_vm1 instance
-module "shared_vm1" {
+module "dev_vm1" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "dev-vm1"
