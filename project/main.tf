@@ -194,7 +194,7 @@ module "shared_vm2" {
 module "dev_networking" {
   source = "./modules/networking"
   vpc_cidr = "192.168.0.0/16"
-  public_cidrs = ["192.168.0/24", "192.168.2.0/24"]
+  public_cidrs = ["192.168.1.0/24", "192.168.2.0/24"]
   private_cidrs = ["192.168.3.0/24", "192.168.4.0/24"]
   availability_zones = ["us-east-1a", "us-east-1b"]
   tags = {Name = "Dev-VPC"}
