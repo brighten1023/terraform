@@ -10,7 +10,7 @@ resource "aws_vpc_peering_connection" "peer_connection" {
 
 #create accept connection
 resource "aws_vpc_peering_connection_accepter" "peer_accepter" {
-  provider        = aws.accepter
+  provider        = aws.peer
   vpc_peering_connection_id = aws_vpc_peering_connection.peer_connection.id
   auto_accept = true
 }
