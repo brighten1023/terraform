@@ -6,8 +6,8 @@ resource "aws_s3_bucket" "storage" {
 }
 
 resource "aws_s3_bucket_object" "write_object" {
-  bucket = var.bucket_id
-  key    = var.file_name
-  source = var.file_path
+  bucket = var.bucket_name
+  key    = aws_s3_bucket.storage.file_name
+  source = aws_s3_bucket.storage.file_path
   acl    = "public-read" 
 }
