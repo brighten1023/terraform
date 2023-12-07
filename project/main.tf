@@ -179,7 +179,7 @@ module "shared_bastion" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "Shared-Bastion"
-  key_name = module.key.key_name
+  key_name = "vockey"
   subnet_id = module.shared_networking.public_subnet_ids[0].id
   vpc_security_group_ids = [module.shared_bastion_sg.sg_id]
   associate_public_ip_address = true
@@ -191,7 +191,7 @@ module "shared_vm1" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "Shared-vm1"
-  key_name = module.key.key_name
+  key_name = "vockey"
   subnet_id = module.shared_networking.private_subnet_ids[0].id
   vpc_security_group_ids = [module.shared_vm1_sg.sg_id]
   associate_public_ip_address = false
@@ -203,7 +203,7 @@ module "shared_vm2" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "Shared-vm2"
-  key_name = module.key.key_name
+  key_name = "vockey"
   subnet_id = module.shared_networking.private_subnet_ids[1].id
   vpc_security_group_ids = [module.shared_vm2_sg.sg_id]
   associate_public_ip_address = false
@@ -271,7 +271,7 @@ module "dev_bastion" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "dev-Bastion"
-  key_name = module.key.key_name
+  key_name = "vockey"
   subnet_id = module.dev_networking.public_subnet_ids[0].id
   vpc_security_group_ids = null
   associate_public_ip_address = true
@@ -283,7 +283,7 @@ module "dev_vm1" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "dev-vm1"
-  key_name = module.key.key_name
+  key_name = "vockey"
   subnet_id = module.dev_networking.private_subnet_ids[0].id
   vpc_security_group_ids = null
   associate_public_ip_address = false
@@ -295,7 +295,7 @@ module "dev_vm2" {
   source = "./modules/instance"
   instance_type = "t2.micro"
   name = "dev-vm2"
-  key_name = module.key.key_name
+  key_name = "vockey"
   subnet_id = module.dev_networking.private_subnet_ids[1].id
   vpc_security_group_ids = null
   associate_public_ip_address = false
