@@ -141,6 +141,19 @@ module "shared_vm2_sg_rule_ingress_ping" {
   source_security_group_id = null
 }
 
+#Create sg ingress rule that allow ping from dev-vm1 for shared-vm2
+module "shared_vm2_sg_rule_ingress_ping_dev" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 8
+  to_port = 0
+  protocol = "icmp"
+  cidr_blocks = ["192.168.3.0/24"]
+  security_group_id = module.shared_vm2_sg.sg_id
+  description = "Ping from shared-vm1"
+  source_security_group_id = null
+}
+
 #Create sg egress rule that allow all traffic for shared-vm2
 module "shared_vm2_sg_rule_egress" {
   source = "./modules/security_group_rule"
@@ -209,6 +222,41 @@ module "peering_connection" {
   dest_route_table_id = module.dev_networking.private_table_id
   source_cidr = "10.0.4.0/24"
   dest_cidr = "192.168.3.0/24"
+}
+
+#Create dev_vm1 sg
+module "dev_vm1_sg" {
+  source = "./modules/security_group"
+  name_prefix = "dev_vm1_sg"
+  tags = {Name = "dev_vm1_sg"}
+  description = "Allow icmp from shared-vm2"
+  vpc_id = module.dev_networking.vpc_id
+}
+
+#Create sg ingress rule that allow ping from shared-vm2 for dev-vm1
+module "dev_vm1_sg_rule_ingress_ping_dev" {
+  source = "./modules/security_group_rule"
+  type = "ingress"
+  from_port = 8
+  to_port = 0
+  protocol = "icmp"
+  cidr_blocks = ["10.0.4.0/24"]
+  security_group_id = module.dev_vm1_sg.sg_id
+  description = "Ping from shared-vm2"
+  source_security_group_id = null
+}
+
+#Create sg egress rule that allow all traffic for dev-vm1
+module "dev_vm1_sg_rule_egress" {
+  source = "./modules/security_group_rule"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.dev_vm1_sg.sg_id
+  description = "Allow all outbound traffic"
+  source_security_group_id = null
 }
 
 #Create dev_bastion instance
