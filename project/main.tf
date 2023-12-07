@@ -94,7 +94,7 @@ module "shared_vm1_sg_rule_ingress_ssh" {
   cidr_blocks = []
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ssh from shared-bastion"
-  source_security_group_id = [module.shared_bastion_sg.sg_id]
+  source_security_group_id = module.shared_bastion_sg.sg_id
 }
 
 #Create sg ingress rule that allow ping from shared-vm2 for shared-vm1
@@ -107,7 +107,7 @@ module "shared_vm1_sg_rule_ingress_ping" {
   cidr_blocks = []
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ping from shared-vm2"
-  source_security_group_id = [module.shared_vm2_sg.sg_id]
+  source_security_group_id = module.shared_vm2_sg.sg_id
 }
 
 #Create sg egress rule that allow all traffic for shared-vm1
@@ -133,7 +133,7 @@ module "shared_vm2_sg_rule_ingress_ssh" {
   cidr_blocks = []
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ssh from shared-bastion"
-  source_security_group_id = [module.shared_bastion_sg.sg_id]
+  source_security_group_id = module.shared_bastion_sg.sg_id
 }
 
 #Create sg ingress rule that allow ping from shared-vm1 for shared-vm2
@@ -146,7 +146,7 @@ module "shared_vm2_sg_rule_ingress_ping" {
   cidr_blocks = []
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ping from shared-vm1"
-  source_security_group_id = [module.shared_vm1_sg.sg_id]
+  source_security_group_id = module.shared_vm1_sg.sg_id
 }
 
 #Create sg ingress rule that allow ping from dev-vm1 for shared-vm2
@@ -159,7 +159,7 @@ module "shared_vm2_sg_rule_ingress_ping_dev" {
   cidr_blocks = []
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ping from shared-vm1"
-  source_security_group_id = [module.dev_vm1_sg.sg_id]
+  source_security_group_id = module.dev_vm1_sg.sg_id
 }
 
 #Create sg egress rule that allow all traffic for shared-vm2
@@ -251,7 +251,7 @@ module "dev_vm1_sg_rule_ingress_ping_dev" {
   cidr_blocks = []
   security_group_id = module.dev_vm1_sg.sg_id
   description = "Ping from shared-vm2"
-  source_security_group_id = [module.shared_vm2_sg.sg_id]
+  source_security_group_id = module.shared_vm2_sg.sg_id
 }
 
 #Create sg egress rule that allow all traffic for dev-vm1

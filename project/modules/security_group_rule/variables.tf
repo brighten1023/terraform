@@ -29,5 +29,5 @@ variable "description" {
 }
 
 variable "source_security_group_id" {
-  type = list(string)
+  type = string
 }
