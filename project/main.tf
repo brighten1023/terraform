@@ -158,7 +158,7 @@ module "shared_vm2_sg_rule_ingress_ping_dev" {
   protocol = "icmp"
   cidr_blocks = ["192.168.3.0/24"]
   security_group_id = module.shared_vm2_sg.sg_id
-  description = "Ping from shared-vm1"
+  description = "Ping from dev-vm1"
   source_security_group_id = null
 }
 
@@ -291,7 +291,7 @@ module "dev_vm1" {
   key_name = "my_key"
   file_path = "./my_key.pem"
   subnet_id = module.dev_networking.private_subnet_ids[0].id
-  vpc_security_group_ids = null
+  vpc_security_group_ids = [module.dev_vm1_sg.sg_id]
   associate_public_ip_address = false
   tags = {Name = "Dev-VM1"}
 }
