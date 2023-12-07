@@ -300,5 +300,5 @@ module "dev_vm2" {
   subnet_id = module.dev_networking.private_subnet_ids[1].id
   vpc_security_group_ids = null
   associate_public_ip_address = false
-  tags = {name = "Dev-VM2"}
+  tags = {Name = "Dev-VM2"}
 }
