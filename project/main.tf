@@ -68,7 +68,7 @@ module "shared_bastion_sg_rule_ingress" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.shared_bastion_sg.sg_id
   description = "Ssh from outside"
-  source_security_group_id = null
+  source_security_group_id = ""
 }
 
 #Create sg egress rule that allow all traffic for shared-bastion
@@ -81,7 +81,7 @@ module "shared_bastion_sg_rule_egress" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.shared_bastion_sg.sg_id
   description = "Allow all outbound traffic"
-  source_security_group_id = null
+  source_security_group_id = ""
 }
 
 #Create sg ingress rule that allow ssh from shared-bastion for shared-vm1
@@ -91,7 +91,7 @@ module "shared_vm1_sg_rule_ingress_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = null
+  cidr_blocks = [""]
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ssh from shared-bastion"
   source_security_group_id = module.shared_bastion_sg.sg_id
@@ -104,7 +104,7 @@ module "shared_vm1_sg_rule_ingress_ping" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = null
+  cidr_blocks = [""]
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ping from shared-vm2"
   source_security_group_id = module.shared_vm2_sg.sg_id
@@ -120,7 +120,7 @@ module "shared_vm1_sg_rule_egress" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Allow all outbound traffic"
-  source_security_group_id = null
+  source_security_group_id = ""
 }
 
 #Create sg ingress rule that allow ssh from shared-bastion for shared-vm2
@@ -130,7 +130,7 @@ module "shared_vm2_sg_rule_ingress_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = null
+  cidr_blocks = [""]
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ssh from shared-bastion"
   source_security_group_id = module.shared_bastion_sg.sg_id
@@ -143,7 +143,7 @@ module "shared_vm2_sg_rule_ingress_ping" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = null
+  cidr_blocks = [""]
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ping from shared-vm1"
   source_security_group_id = module.shared_vm1_sg.sg_id
@@ -156,7 +156,7 @@ module "shared_vm2_sg_rule_ingress_ping_dev" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = []
+  cidr_blocks = [""]
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ping from shared-vm1"
   source_security_group_id = module.dev_vm1_sg.sg_id
@@ -172,7 +172,7 @@ module "shared_vm2_sg_rule_egress" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Allow all outbound traffic"
-  source_security_group_id = null
+  source_security_group_id = ""
 }
 
 #Create shared_bastion instance
@@ -248,7 +248,7 @@ module "dev_vm1_sg_rule_ingress_ping_dev" {
   from_port = 8
   to_port = 0
   protocol = "icmp"
-  cidr_blocks = null
+  cidr_blocks = [""]
   security_group_id = module.dev_vm1_sg.sg_id
   description = "Ping from shared-vm2"
   source_security_group_id = module.shared_vm2_sg.sg_id
@@ -264,7 +264,7 @@ module "dev_vm1_sg_rule_egress" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.dev_vm1_sg.sg_id
   description = "Allow all outbound traffic"
-  source_security_group_id = null
+  source_security_group_id = ""
 }
 
 #Create dev_bastion instance
