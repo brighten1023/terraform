@@ -7,13 +7,14 @@ resource "aws_vpc_peering_connection" "peer_connection" {
 
   auto_accept = true
 }
-
+/*
 #create accept connection
 resource "aws_vpc_peering_connection_accepter" "peer_accepter" {
   provider        = aws.peer
   vpc_peering_connection_id = aws_vpc_peering_connection.peer_connection.id
   auto_accept = true
 }
+*/
 
 #create route from source to dest peer
 resource "aws_route" "route" {
