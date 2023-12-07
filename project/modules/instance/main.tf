@@ -2,7 +2,7 @@
 
 #Create instance
 resource "aws_instance" "instance" {
-  ami = data.aws_ami.ami-amzn2.id
+  ami = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   key_name = var.key_name
   monitoring = true
@@ -21,4 +21,20 @@ data "aws_ami" "ami-amzn2" {
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
 
+}
+data "aws_ami" "ubuntu" {
+
+    most_recent = true
+
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    }
+
+    filter {
+        name = "virtualization-type"
+        values = ["hvm"]
+    }
+
+    owners = ["099720109477"]
 }
