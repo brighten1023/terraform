@@ -83,10 +83,10 @@ module "shared_vm1_sg_rule_ingress_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = []
+  cidr_blocks = ["10.0.1.0/24"]
   security_group_id = module.shared_vm1_sg.sg_id
   description = "Ssh from shared-bastion"
-  source_security_group_id = module.shared_bastion_sg.sg_id
+  source_security_group_id = null
 }
 
 #Create sg ingress rule that allow ping from shared-vm2 for shared-vm1
@@ -122,10 +122,10 @@ module "shared_vm2_sg_rule_ingress_ssh" {
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = []
+  cidr_blocks = ["10.0.1.0/24"]
   security_group_id = module.shared_vm2_sg.sg_id
   description = "Ssh from shared-bastion"
-  source_security_group_id = module.shared_bastion_sg.sg_id
+  source_security_group_id = null
 }
 
 #Create sg ingress rule that allow ping from shared-vm1 for shared-vm2
