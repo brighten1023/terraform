@@ -1,4 +1,4 @@
-# file modules/vpc/output.tf
+# file modules/networking/output.tf
 #output subnets ids
 output "public_subnet_ids" {
   value = aws_subnet.public[*]
