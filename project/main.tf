@@ -13,7 +13,7 @@ provider "aws" {
     shared_credentials_file = ".aws/credentials"
 }
 
-#Create VPC, subnets, igw, nat
+#Create VPC, subnets, igw, nat in shared network
 module "shared_networking" {
   source = "./modules/networking"
   vpc_cidr = "10.0.0.0/16"
@@ -188,4 +188,59 @@ module "shared_vm2" {
   vpc_security_group_ids = [module.shared_vm2_sg.sg_id]
   associate_public_ip_address = false
   tags = "Shared-VM2"
+}
+
+#Create VPC, subnets, igw, nat in dev network
+module "dev_networking" {
+  source = "./modules/networking"
+  vpc_cidr = "192.168.0.0/16"
+  public_cidrs = ["192.168.0/24", "192.168.2.0/24"]
+  private_cidrs = ["192.168.3.0/24", "192.168.4.0/24"]
+  availability_zones = ["us-east-1a", "us-east-1b"]
+  tags = {Name = "Dev-VPC"}
+}
+
+#Create peering connection
+module "peering_connection" {
+  source = "./modules/peering"
+  source_route_table_id = module.shared_networking.private_table_id
+  dest_route_table_id = module.dev_networking.private_table_id
+  source_cidr = "10.0.4.0/24"
+  dest_cidr = "192.168.3.0/24"
+}
+
+#Create dev_bastion instance
+module "dev_bastion" {
+  source = "./modules/instance"
+  instance_type = "t2.micro"
+  name = "dev-Bastion"
+  key_name = "vockey"
+  subnet_id = module.dev_networking.public_subnet_ids[0].id
+  vpc_security_group_ids = bull
+  associate_public_ip_address = true
+  tags = "Dev-Bastion"
+}
+
+#Create dev_vm1 instance
+module "shared_vm1" {
+  source = "./modules/instance"
+  instance_type = "t2.micro"
+  name = "dev-vm1"
+  key_name = "vockey"
+  subnet_id = module.dev_networking.private_subnet_ids[0].id
+  vpc_security_group_ids = null
+  associate_public_ip_address = false
+  tags = "Dev-VM1"
+}
+
+#Create dev_vm2 instance
+module "dev_vm2" {
+  source = "./modules/instance"
+  instance_type = "t2.micro"
+  name = "dev-vm2"
+  key_name = "vockey"
+  subnet_id = module.dev_networking.private_subnet_ids[1].id
+  vpc_security_group_ids = null
+  associate_public_ip_address = false
+  tags = "Dev-VM2"
 }

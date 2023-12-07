@@ -17,3 +17,8 @@ output "nat_gateway_id" {
 output "vpc_id" {
   value = aws_vpc.project_vpc.id
 }
+
+#output private table id
+output "private_table_id" {
+  value = aws_route_table.rt-private.id
+}

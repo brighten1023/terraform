@@ -1,24 +1,4 @@
 # file modules/networking/main.tf
-/*
-#US-east-1a AZ data source
-data "aws_availability_zones" "us-east-1a" {
-  state = "avaiable"
-}
-
-#US-east-1b AZ data source
-data "aws_availability_zones" "us-east-1b" {
-  state = "avaiable"
-}
-*/
-/*
-#Create VPC-Shared VPC
-resource "aws_vpc" "VPC-Shared" {
-  cidr_block = var.vpc_cidr
-  enable_dns_hostnames = true
-  enable_dns_support = true
-  tags = { Name = "VPC-Shared" }
-}
-*/
 
 #Create VPC
 resource "aws_vpc" "project_vpc" {
@@ -28,16 +8,6 @@ resource "aws_vpc" "project_vpc" {
   tags = var.tags
 }
 
-
-#Create VPC-Dev VPC
-/*
-resource "aws_vpc" "VPC-Dev" {
-  cidr_block = var.vpc_cidr
-  enable_dns_hostnames = true
-  enable_dns_support = true
-  tags = { Name = "VPC-Dev" }
-}
-*/
 #Create public subnet
 resource "aws_subnet" "public" {
   vpc_id = aws_vpc.project_vpc.id
@@ -91,7 +61,7 @@ resource "aws_nat_gateway" "project_nat" {
   depends_on = [ aws_internet_gateway.project_igw ]
 }
 
-#Create Public Route Tables in Shared VPC
+#Create Public Route Tables 
 resource "aws_route_table" "rt-public" {
   vpc_id = aws_vpc.project_vpc.id
   route{
@@ -105,7 +75,7 @@ resource "aws_route_table" "rt-public" {
   )
 }
 
-#Create Private Route Tables in Shared VPC
+#Create Private Route Tables
 resource "aws_route_table" "rt-private" {
   vpc_id = aws_vpc.project_vpc.id
   route{
