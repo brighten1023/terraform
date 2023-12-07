@@ -22,7 +22,7 @@ variable "vpc_security_group_ids" {
 }
 
 variable "tags" {
-    type = string
+    type = map(string)
 }
 
 variable "associate_public_ip_address" {

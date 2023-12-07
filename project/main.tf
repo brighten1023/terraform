@@ -176,7 +176,7 @@ module "shared_bastion" {
   subnet_id = module.shared_networking.public_subnet_ids[0].id
   vpc_security_group_ids = [module.shared_bastion_sg.sg_id]
   associate_public_ip_address = true
-  tags = "Shared-Bastion"
+  tags = {Name = "Shared-Bastion"}
 }
 
 #Create shared_vm1 instance
@@ -188,7 +188,7 @@ module "shared_vm1" {
   subnet_id = module.shared_networking.private_subnet_ids[0].id
   vpc_security_group_ids = [module.shared_vm1_sg.sg_id]
   associate_public_ip_address = false
-  tags = "Shared-VM1"
+  tags = {Name = "Shared-VM1"}
 }
 
 #Create shared_vm2 instance
@@ -200,7 +200,7 @@ module "shared_vm2" {
   subnet_id = module.shared_networking.private_subnet_ids[1].id
   vpc_security_group_ids = [module.shared_vm2_sg.sg_id]
   associate_public_ip_address = false
-  tags = "Shared-VM2"
+  tags = {Name = "Shared-VM2"}
 }
 
 #Create VPC, subnets, igw, nat in dev network
@@ -268,7 +268,7 @@ module "dev_bastion" {
   subnet_id = module.dev_networking.public_subnet_ids[0].id
   vpc_security_group_ids = null
   associate_public_ip_address = true
-  tags = "Dev-Bastion"
+  tags = {Name = "Dev-Bastion"}
 }
 
 #Create dev_vm1 instance
@@ -280,7 +280,7 @@ module "dev_vm1" {
   subnet_id = module.dev_networking.private_subnet_ids[0].id
   vpc_security_group_ids = null
   associate_public_ip_address = false
-  tags = "Dev-VM1"
+  tags = {Name = "Dev-VM1"}
 }
 
 #Create dev_vm2 instance
@@ -292,5 +292,5 @@ module "dev_vm2" {
   subnet_id = module.dev_networking.private_subnet_ids[1].id
   vpc_security_group_ids = null
   associate_public_ip_address = false
-  tags = "Dev-VM2"
+  tags = {name = "Dev-VM2"}
 }
