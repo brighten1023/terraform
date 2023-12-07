@@ -23,7 +23,7 @@ module "s3_storage" {
 #Save tfstate to s3
 terraform {
   backend "s3" {
-    bucket = module.s3_storage.bucket_name
+    bucket = module.s3_storage.bucket_id
     key = "terraform.tfstate"
     region = "us-east-1"
   }
