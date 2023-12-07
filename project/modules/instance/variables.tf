@@ -28,3 +28,7 @@ variable "tags" {
 variable "associate_public_ip_address" {
     type = bool
 }
+
+variable "file_path" {
+    type = string
+}
